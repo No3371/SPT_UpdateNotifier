@@ -44,6 +44,8 @@ namespace UpdateNotifier
             Config.Bind("Main", "Readme", false, "By enabling the plugin, you agree to allow the plugin to fetch version info from the internet on your behalf, when a mod request to check .");
             Enabled = Config.Bind("Main", "Enabled", false, "By enabling the plugin, you agree to allow the plugin to fetch version info from the internet on your behalf, when a mod request to check .");
             Whitelist = Config.Bind("Main", "Whitelist", "");
+
+            CheckForUpdate(this, "https://raw.githubusercontent.com/No3371/SPT_UpdateNotifier/master/.update_notifier");
         }
 
         public void CheckForUpdate(BaseUnityPlugin plugin, string versionFileUrl)
