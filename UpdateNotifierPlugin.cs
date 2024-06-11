@@ -117,21 +117,22 @@ namespace UpdateNotifier
                 }
                 else
                 {
+                    var text = webRequest.downloadHandler.text;
                     if (webRequest.downloadedBytes > 16)
                     {
-                        string message = $"[Update Notifier] {plugin.Info.Metadata.Name} requested a suspicious version file! Update Notifier only accepts up to 16 bytes: {webRequest.downloadHandler.text}";
+                        string message = $"[Update Notifier] {plugin.Info.Metadata.Name} requested a suspicious version file! Update Notifier only accepts up to 16 bytes: {text}";
                         EFT.UI.ConsoleScreen.LogWarning(message);
                         yield break;
                     }
-                    if (!Version.TryParse(webRequest.downloadHandler.text, out var ver))
+                    if (!Version.TryParse(text, out var ver))
                     {
-                        string message = $"[Update Notifier] {plugin.Info.Metadata.Name} requested a invalid version file! The content is not a valid version string: {webRequest.downloadHandler.text}";
+                        string message = $"[Update Notifier] {plugin.Info.Metadata.Name} requested a invalid version file! The content is not a valid version string: {text} ({text.Length})";
                         EFT.UI.ConsoleScreen.LogWarning(message);
                         yield break;
                     }
                     else if (ver.CompareTo(plugin.Info.Metadata.Version) < 0)
                     {
-                        string message = $"[Update Notifier] Update for {plugin.Info.Metadata.Name} is available: {webRequest.downloadHandler.text} (Current: {plugin.Info.Metadata.Version})";
+                        string message = $"[Update Notifier] Update for {plugin.Info.Metadata.Name} is available: {text} (Current: {plugin.Info.Metadata.Version})";
                         NotificationManagerClass.DisplayWarningNotification(message, EFT.Communications.ENotificationDurationType.Long);
                         EFT.UI.ConsoleScreen.Log(message);
                     }
