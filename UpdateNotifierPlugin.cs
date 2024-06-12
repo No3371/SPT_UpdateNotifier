@@ -130,7 +130,7 @@ namespace UpdateNotifier
                         EFT.UI.ConsoleScreen.LogWarning(message);
                         yield break;
                     }
-                    else if (ver.CompareTo(plugin.Info.Metadata.Version) < 0)
+                    else if (ver.CompareTo(plugin.Info.Metadata.Version) > 0)
                     {
                         string message = $"[Update Notifier] Update for {plugin.Info.Metadata.Name} is available: {text} (Current: {plugin.Info.Metadata.Version})";
                         NotificationManagerClass.DisplayWarningNotification(message, EFT.Communications.ENotificationDurationType.Long);
