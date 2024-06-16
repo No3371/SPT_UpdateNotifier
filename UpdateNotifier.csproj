@@ -52,6 +52,10 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(ManagedAssembliesPath)\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
