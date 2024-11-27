@@ -1,15 +1,15 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using System;
-using UnityEngine;
 using static UpdateNotifier.AssemblyInfo;
 using System.Collections.Generic;
-using UnityEngine.Networking;
 using System.Collections;
-using EFT.UI;
 using System.Threading.Tasks;
 using System.IO;
 using System.Collections.Concurrent;
+using BepInEx.Configuration;
+using UnityEngine;
+using EFT.UI;
+using UnityEngine.Networking;
 
 namespace UpdateNotifier
 {
@@ -40,18 +40,17 @@ namespace UpdateNotifier
         public const string Trademark = "";
         public const string Culture = "";
 
-        public const int TarkovVersion = 29197;
+        public const int TarkovVersion = 33420;
         public const string EscapeFromTarkov = "EscapeFromTarkov.exe";
         public const string ModName = "UpdateNotifier";
-        public const string ModVersion = "1.383.04";
-        public const string SPTGUID = "com.spt-aki.core";
-        public const string SPTVersion = "3.8.0";
+        public const string ModVersion = "1.3100.0";
+        public const string SPTGUID = "com.SPT.core";
+        public const string SPTVersion = "3.10.0";
     }
 
     [BepInPlugin("bastudio.updatenotifier", ModName, ModVersion)]
     [BepInDependency(SPTGUID, SPTVersion)]
     [BepInProcess(EscapeFromTarkov)]
-    [DefaultExecutionOrder(100)]
     public class UpdateNotifierPlugin : BaseUnityPlugin
     {
         ConcurrentQueue<QueuedCheck> queue;
@@ -72,7 +71,7 @@ namespace UpdateNotifier
         void FixedUpdate ()
         {
             if (CommonUI.Instance?.MenuScreen?.isActiveAndEnabled == true
-             && !queue.IsEmpty)
+             && queue != null &&!queue.IsEmpty)
             {
                 
                 if (checking == null)
@@ -125,8 +124,12 @@ namespace UpdateNotifier
                 yield return Check(task.name, task.id, task.version, task.remote);
                 yield return wait;
             }
-            string message = $"[Update Notifier] Updates available for {updatesAvailable} mods. Please check console. (~)";
-            NotificationManagerClass.DisplayWarningNotification(message, EFT.Communications.ENotificationDurationType.Long);
+
+            if (updatesAvailable > 0)
+            {
+                string message = $"[Update Notifier] Updates available for {updatesAvailable} mods. Please check console. (~)";
+                NotificationManagerClass.DisplayWarningNotification(message, EFT.Communications.ENotificationDurationType.Long);
+            }
             // EFT.UI.ConsoleScreen.Log(message);
             checking = null;
         }
@@ -153,7 +156,7 @@ namespace UpdateNotifier
             if (!Whitelist.Value.Contains($"{id}=>{versionFileUrl}"))
             {
                 inDialog = true;
-                var msg = $"{name} ({id}) is requesting to download unknown file from {versionFileUrl} to check for new version, but the url is not in white list.\n\nDo you want to allow the request and add it to whitelist?\n\n This would allows Update Notifier to remind you if it finds a update for the mod from now on.";
+                var msg = $"{name} ({id}) is requesting to download unknown file from {versionFileUrl} to check for new version, but the url is not in your white list.\n\nDo you want to allow the request and add it to whitelist?\n\n This would allows Update Notifier to remind you if it finds a update for the mod from now on.";
                 ItemUiContext.Instance.ShowMessageWindow(msg, PreAccept, Decline, "Update Notifier");
                 yield break;
             }
